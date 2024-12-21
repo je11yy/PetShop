@@ -1,0 +1,182 @@
+.product-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.product-page h2 {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #6e4b3a;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* .product-page .product-image {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    margin-top: 20px;
+} */
+
+/* Карточка продукта */
+.product-page .product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(72, 51, 25, 0.2);
+    width: 90%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-page .product-name {
+    font-size: 2.5em; /* Увеличиваем размер шрифта для имени продукта */
+    font-weight: bold;
+    color: #553930;
+    margin-bottom: 20px; /* Увеличиваем отступ между элементами */
+}
+
+.product-page .price {
+    color: #4d6534;
+    font-size: 2em;
+    font-weight: bold;
+}
+.product-page p {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #855f4c;
+}
+
+/* Скрыть стандартное поле ввода */
+.file-input {
+    display: none;
+}
+
+/* Стиль для кастомной кнопки */
+.file-label {
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #855f4c;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+/* Эффект при наведении */
+.file-label:hover {
+    background-color: #553930;
+}
+
+/* Стиль для отображения имени выбранного файла */
+.product-page .file-name {
+    margin-top: 5px;
+    font-size: 1em;
+    text-align: center;
+}
+
+hr {
+    color: #855f4c;
+}
+
+.product-page .quantity {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.product-page .alert-popup {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(110, 75, 58, 0.8);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: fadeInOut 3s forwards;
+}
+
+.product-page .alert-popup p {
+    color: white;
+    font-size: 1.2em;
+}
+
+.product-page .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.product-page button {
+    font-size: 1.4em;
+}
+
+.product-page .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-page .no-products {
+    text-align: center;
+    color: #b97a52;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.error {
+    margin: 20px;
+    width: 100%;
+    font-weight: bold;
+    color: #982828;
+    text-align: center;
+}
+
+.out-of-stock {
+    font-weight: bold;
+    color: #982828;
+}
+
+.product-page .out-of-stock {
+    font-weight: bold;
+    color: #982828;
+}
+
+/* Стили для input элементов */
+.product-page .product-card input[type="text"],
+.product-page .product-card input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Фокус на input элементы */
+.product-page .product-card input[type="text"]:focus,
+.product-page .product-card input[type="number"]:focus {
+    border-color: #553930;
+    outline: none;
+}
+
+.product-page input::placeholder {
+    color: #98867c;
+    font-style: italic;
+}

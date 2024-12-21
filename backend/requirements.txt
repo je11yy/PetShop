@@ -1,0 +1,8 @@
+fastapi
+asyncpg
+pydantic
+uvicorn
+PyJWT
+passlib
+datetime
+pydantic[email]

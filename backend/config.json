@@ -1,0 +1,14 @@
+{
+    "database": {
+        "host": "db",
+        "port": 5432,
+        "user": "user",
+        "password": "password",
+        "dbname": "petshop"
+    },
+    "jwt": {
+        "jwt_secret_key": "REALLYSECRETKEY",
+        "jwt_algorithm": "HS256",
+        "jwt_expiration_days": 7
+    }
+}

@@ -1,0 +1,192 @@
+/* Контейнер для продуктов */
+.product-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.order {
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+h2 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #6e4b3a;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Стиль для заголовков категорий (category-title) */
+.category-title {
+    font-size: 1.8em;
+    color: #8e5a3d;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #8e5a3d; /* Подчеркивание */
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.category-title:hover {
+    color: #6a3e2f; /* Более темный оттенок при наведении */
+    border-color: #6a3e2f; /* Меняем цвет подчеркивания */
+}
+
+.category-description {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #6a3e2f;
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0; /* Изначально скрыто */
+    overflow: hidden; /* Обрезаем лишнее */
+    padding: 10px;
+    transition: opacity 0.6s ease-in-out, max-height 0.3s ease-in-out;
+}
+
+.category-title:hover + .category-description {
+    opacity: 1;
+    visibility: visible;
+    max-height: 200px; /* Даем достаточно места для описания */
+    padding: 10px;
+}
+
+.product-image {
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    aspect-ratio: 1.5;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Карточка продукта */
+.product-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(72, 51, 25, 0.2);
+    width: 22em;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #553930;
+    margin-bottom: 10px;
+}
+
+.product-name:hover {
+    color: #75574d;
+}
+
+.price-quantity-container {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.price {
+    color: #4d6534;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.product-card button {
+    margin-top: 10px;
+}
+
+.quantity {
+    font-weight: bold;
+}
+
+p {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #855f4c;
+}
+
+.no-products {
+    text-align: center;
+    color: #b97a52;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        width: 48%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        width: 100%;
+    }
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+.error {
+    margin: 20px;
+    width: 100%;
+    font-weight: bold;
+    color: #982828;
+    text-align: center;
+}
+
+/* Стили для input элементов */
+.product-card input[type="text"],
+.product-card input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Фокус на input элементы */
+.product-card input[type="text"]:focus,
+.product-card input[type="number"]:focus {
+    border-color: #553930;
+    outline: none;
+}
+
+input::placeholder {
+    color: #98867c;
+    font-style: italic;
+}

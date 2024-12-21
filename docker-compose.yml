@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5433/petshop
+    depends_on:
+      - db
+    networks:
+      - network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - network
+
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: petshop_db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: petshop
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - network
+
+volumes:
+  db_data:
+
+networks:
+  network:
+    driver: bridge

@@ -1,0 +1,77 @@
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 40px;
+}
+
+.profile-field {
+    margin-bottom: 15px;
+}
+
+.profile-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.field-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.field-container input {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.field-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #8e5a3d;
+}
+
+.field-container button:hover {
+    color: #6a3e2f;
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #8e5a3d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #6a3e2f;
+}
+
+.edit-button:hover svg {
+    color: #6a3e2f;
+}
+
+.edit-button:hover {
+    background-color: rgba(100, 80, 73, 0.2);
+}
+
+.error {
+    margin: 20px;
+    width: 100%;
+    font-weight: bold;
+    color: #982828;
+    text-align: center;
+}

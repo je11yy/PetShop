@@ -1,0 +1,135 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f4f4f4;
+    color: #6e4b3a;
+    line-height: 1.6;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+.app-nav {
+    width: 100%;
+    background-color: #6e4b3a;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.main-content {
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #6e4b3a;
+}
+
+button {
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #6e4b3a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 2px;
+}
+
+button:hover {
+    background-color: #53382a;
+}
+
+.seller-button {
+    background-color: #8e3d3d;
+}
+
+.seller-button:hover {
+    background-color: #612727;
+}
+
+.error {
+    margin: 20px;
+    width: 100%;
+    font-weight: bold;
+    color: #982828;
+    text-align: center;
+}
+
+/* Product List Styles */
+.product-list {
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form Styles */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+form button {
+    width: 100%;
+    font-weight: bold;
+    background-color: #6e4b3a;
+}
+
+form button:hover {
+    background-color: #4a322d;
+}

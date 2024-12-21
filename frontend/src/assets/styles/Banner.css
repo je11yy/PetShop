@@ -1,0 +1,63 @@
+.banner {
+    background: url("https://img.freepik.com/free-photo/cute-animals-group-white-background_23-2150038548.jpg?t=st=1734519912~exp=1734523512~hmac=43be91373296bbea3aa0955c23e251e99bdf633809a7d7a631a8c46e05cd6802&w=1380")
+        no-repeat center center/cover;
+    width: 95%;
+    aspect-ratio: 1.7;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.banner-content {
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 1%;
+}
+
+.banner h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #4a322d;
+}
+
+.banner p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #4a322d;
+}
+
+.error {
+    margin: 20px;
+    width: 100%;
+    font-weight: bold;
+    color: #982828;
+    text-align: center;
+}
+
+.banner-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.banner-button {
+    background-color: #6e4b3a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner-button:hover {
+    background-color: #4a322d;
+}
