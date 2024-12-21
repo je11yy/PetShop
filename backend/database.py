@@ -63,7 +63,7 @@ class Database:
     # СДЕЛАТЬ ФУНКЦИЕЙ ВНУТРИ БД!!!
     async def get_cart_item_by_product(self, conn, user_id: int, product_id: int):
         query = """
-        SELECT * FROM Cart WHERE customer_id = $1 AND product_id = $2
+        SELECT * FROM get_cart_item_by_product($1, $2)
         """
         return await conn.fetchrow(query, user_id, product_id)
 
@@ -75,7 +75,7 @@ class Database:
     
     async def add_item_to_cart(self, conn, user_id: int, product_id: int):
         await conn.execute(
-            "INSERT INTO cart (customer_id, product_id, quantity) VALUES ($1, $2, $3)",
+            "CALL add_item_to_cart($1, $2, $3)",
             user_id, product_id, 1
         )
 
@@ -142,7 +142,7 @@ class Database:
             )
 
     async def delete_product_by_id(self, conn, product_id):
-        await conn.fetch("SELECT delete_product($1);", product_id)
+        await conn.fetch("CALL delete_product($1);", product_id)
 
     async def add_product(self, conn, product_info):
         query = """
@@ -182,8 +182,7 @@ class Database:
     async def insert_product(self, conn, name, description, price, quantity, category_id, image):
         await conn.execute(
             """
-            INSERT INTO Product (name, description, price, quantity, category_id, image) 
-            VALUES ($1, $2, $3, $4, $5, $6);
+            CALL insert_product($1, $2, $3, $4, $5, $6);
             """, name, description, price, quantity, category_id, image
         )
 
@@ -192,7 +191,6 @@ class Database:
         try:
             await conn.execute(query, consumer_id)
         except Exception as e:
-            # Логика обработки исключений остается в вызывающей функции
             raise e
 
     async def delete_or_update_cart_product(self, conn, customer_id, product_id):

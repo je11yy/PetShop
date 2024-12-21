@@ -91,15 +91,14 @@ const Product = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                // Закодировать файл в base64
-                const imageBase64 = reader.result.split(",")[1]; // Убираем префикс "data:image/*;base64,"
+                const imageBase64 = reader.result.split(",")[1];
                 setProduct((prevProduct) => ({
                     ...prevProduct,
                     image: imageBase64,
                 }));
             };
             reader.onerror = () => setError("Error reading file.");
-            reader.readAsDataURL(file); // Преобразуем файл в ArrayBuffer
+            reader.readAsDataURL(file);
         }
         setImageLoading(false);
     };

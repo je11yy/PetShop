@@ -16,14 +16,6 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* .product-page .product-image {
-    width: 100%;
-    max-width: 800px;
-    height: auto;
-    margin-top: 20px;
-} */
-
-/* Карточка продукта */
 .product-page .product-card {
     display: flex;
     flex-direction: column;
@@ -40,10 +32,10 @@
 }
 
 .product-page .product-name {
-    font-size: 2.5em; /* Увеличиваем размер шрифта для имени продукта */
+    font-size: 2.5em;
     font-weight: bold;
     color: #553930;
-    margin-bottom: 20px; /* Увеличиваем отступ между элементами */
+    margin-bottom: 20px;
 }
 
 .product-page .price {
@@ -58,12 +50,10 @@
     color: #855f4c;
 }
 
-/* Скрыть стандартное поле ввода */
 .file-input {
     display: none;
 }
 
-/* Стиль для кастомной кнопки */
 .file-label {
     font-weight: bold;
     display: inline-block;
@@ -77,12 +67,10 @@
     margin-top: 10px;
 }
 
-/* Эффект при наведении */
 .file-label:hover {
     background-color: #553930;
 }
 
-/* Стиль для отображения имени выбранного файла */
 .product-page .file-name {
     margin-top: 5px;
     font-size: 1em;
@@ -157,7 +145,6 @@ hr {
     color: #982828;
 }
 
-/* Стили для input элементов */
 .product-page .product-card input[type="text"],
 .product-page .product-card input[type="number"] {
     width: 100%;
@@ -169,7 +156,6 @@ hr {
     font-size: 16px;
 }
 
-/* Фокус на input элементы */
 .product-page .product-card input[type="text"]:focus,
 .product-page .product-card input[type="number"]:focus {
     border-color: #553930;

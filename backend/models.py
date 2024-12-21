@@ -18,7 +18,7 @@ class Product(BaseModel):
 
 class Category(BaseModel):
     name: str
-    description: str
+    description: Optional[str]
     products: List[Product]
 
 class ProductResponse(BaseModel):

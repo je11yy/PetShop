@@ -1,5 +1,5 @@
 import base64
-from fastapi import Depends, FastAPI, HTTPException, Response, status, Query
+from fastapi import Depends, FastAPI, HTTPException, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from database import Database
@@ -16,9 +16,7 @@ app = FastAPI()
 BACKUP_DIR = "/backups"
 
 origins = [
-    "http://localhost:3000", 
-    "http://frontend:3000", 
-    "*"
+    "http://frontend:3000"
 ]
 
 app.add_middleware(
@@ -39,14 +37,12 @@ async def startup():
 
     # подумать, как лучше это сделать
     async with db.pool.acquire() as conn:
-        # Проверяем, есть ли уже данные в таблице Seller
         seller_exists = await db.get_seller(conn)
         
         if seller_exists:
             return
         nickname = "admin"
         password = "admin"
-        # Хэшируем пароль и добавляем нового продавца, если таблица пуста
         hashed_password = auth_service._AuthService__hash_password(password)
         await db.insert_seller(conn, nickname, hashed_password)
 
@@ -60,32 +56,26 @@ async def get_products():
 @app.post("/login", response_model=models.LoginResponse)
 async def login(request: models.LoginRequest):
     async with db.pool.acquire() as conn:
-        # Ищем пользователя в базе данных
         users = await db.get_user_by_email(conn, request.email)
         if not users:
             raise HTTPException(status_code=401, detail="Invalid credentials")
         user = users[0]
-        # Проверяем пароль
         if not auth_service._AuthService__verify_password(request.password, user['user_hashed_password']):
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
-        # Создаем JWT
         token = auth_service._AuthService__create_jwt(user_id=user['user_id'], user_email=user['user_email'])
         return {"token": token}
     
 @app.post("/seller/login", response_model=models.LoginResponse)
 async def login(request: models.SellerLoginRequest):
     async with db.pool.acquire() as conn:
-        # Ищем пользователя в базе данных
         sellers = await db.get_seller(conn)
         if not sellers:
             raise HTTPException(status_code=401, detail="Invalid credentials")
         seller = sellers[0]
-        # Проверяем пароль
         if not auth_service._AuthService__verify_password(request.password, seller['hashed_password']):
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
-        # Создаем JWT
         token = auth_service._AuthService__create_jwt(user_id=seller['id'], user_email=seller['nickname'])
         return {"token": token}
     
@@ -98,7 +88,6 @@ async def register_user(user: models.RegisterRequest):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email already exists"
             )
-        # Хэшируем пароль и добавляем нового пользователя
         hashed_password = auth_service._AuthService__hash_password(user.password)
         await db.add_new_user(conn, user.email, hashed_password)
         return {"message": "User registered successfully"}
@@ -110,7 +99,6 @@ async def get_cart(credentials: HTTPAuthorizationCredentials = Depends(auth_sche
         user = auth_service._AuthService__decode_token(token)  # Расшифровываем токен
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
-    # Получаем корзину пользователя из базы данных
     async with db.pool.acquire() as conn:
         cart_items = await db.get_cart_items(conn, user_id=user['user_id'])
         return functional.prepare_cart(cart_items)
@@ -123,14 +111,11 @@ async def remove_item_from_cart(product_id: int, credentials: HTTPAuthorizationC
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    # Удаляем товар из корзины
     async with db.pool.acquire() as conn:
-        # Проверяем, есть ли этот товар в корзине пользователя
         item = await db.get_cart_item_by_product(conn, user_id=user['user_id'], product_id=product_id)
         if not item:
             raise HTTPException(status_code=404, detail="Item not found in cart")
 
-        # Удаляем товар из корзины
         await db.delete_or_update_cart_product(conn, user['user_id'], product_id=product_id)
         return {"message": "Item removed from cart"}
     
@@ -138,7 +123,7 @@ async def remove_item_from_cart(product_id: int, credentials: HTTPAuthorizationC
 async def add_item_to_cart(product_id: int, credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     try:
         token = credentials.credentials
-        user = auth_service._AuthService__decode_token(token)  # Расшифровываем токен
+        user = auth_service._AuthService__decode_token(token)
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -155,7 +140,7 @@ async def add_item_to_cart(product_id: int, credentials: HTTPAuthorizationCreden
 async def get_customer_info(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     try:
         token = credentials.credentials
-        user = auth_service._AuthService__decode_token(token)  # Расшифровываем токен
+        user = auth_service._AuthService__decode_token(token)
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -254,7 +239,7 @@ async def get_product_image(product_id: int):
 async def checkout_order(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     try:
         token = credentials.credentials
-        user = auth_service._AuthService__decode_token(token)  # Расшифровываем токен
+        user = auth_service._AuthService__decode_token(token)
         user_id = user['user_id']
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -277,7 +262,7 @@ async def checkout_order(credentials: HTTPAuthorizationCredentials = Depends(aut
 async def get_orders_with_products(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     try:
         token = credentials.credentials
-        user = auth_service._AuthService__decode_token(token)  # Расшифровываем токен
+        user = auth_service._AuthService__decode_token(token)
         user_id = user['user_id']
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -317,27 +302,22 @@ async def get_orders_with_products(credentials: HTTPAuthorizationCredentials = D
 @app.post("/backup")
 async def backup_database():
     try:
-        # Убедитесь, что директория для бэкапов существует
         os.makedirs(BACKUP_DIR, exist_ok=True)
         current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        # Формируем имя файла с текущей датой
         backup_file = os.path.join(BACKUP_DIR, f"db_backup_{current_time}.dump")
 
-        # Команда для создания резервной копии
+        # лучше брать из конфига...
         command = [
             "pg_dump",
-            "--host", "db",  # Замените на ваш хост
-            "--port", "5432",       # Замените на ваш порт
-            "--username", "user",  # Ваш пользователь PostgreSQL
-            "--dbname", "petshop",   # Имя вашей базы данных
+            "--host", "db",
+            "--port", "5432", 
+            "--username", "user", 
+            "--dbname", "petshop",
             "--format=c",
             "--file", backup_file
         ]
+        os.environ["PGPASSWORD"] = "password" 
 
-        # Убедитесь, что pg_dump не требует интерактивного ввода пароля
-        os.environ["PGPASSWORD"] = "password"  # Лучше заменить на переменную окружения
-
-        # Выполняем команду
         subprocess.run(command, check=True)
 
         return {"message": f"Backup created successfully at {backup_file}"}
@@ -352,31 +332,24 @@ async def backup_database():
 async def restore_database(backup: models.BackUpRequest):
     backup_filename = backup.filename
     try:
-        # Формируем полный путь до файла
         backup_file = os.path.join(BACKUP_DIR, backup_filename)
 
-        # Проверяем, существует ли указанный файл
         if not os.path.exists(backup_file):
             raise HTTPException(status_code=404, detail="Backup file not found")
 
-        # Команда для восстановления
+        # лучше брать из конфига...
         command = [
             "pg_restore",
-            "--host", "db",  # Замените на ваш хост
-            "--port", "5432",       # Замените на ваш порт
-            "--username", "user",  # Ваш пользователь PostgreSQL
+            "--host", "db",
+            "--port", "5432",
+            "--username", "user",
             "--dbname", "petshop",
             "--if-exists",
             "--clean",
             backup_file
         ]
-
-        # # Убедитесь, что psql не требует интерактивного ввода пароля
         os.environ["PGPASSWORD"] = "password"
 
-        # # Выполняем команду восстановления
-        # with open(backup_file, "r") as file:
-        #     subprocess.run(command, stdin=file, check=True)
         subprocess.run(command, check=True)
 
         return {"message": f"Database restored successfully from {backup_filename}"}
@@ -389,11 +362,9 @@ async def restore_database(backup: models.BackUpRequest):
 @app.get("/backups", response_model=models.BackupsGetResponse)
 async def get_backups():
     try:
-        # Проверяем, существует ли директория
         if not os.path.exists(BACKUP_DIR):
-            os.makedirs(BACKUP_DIR)  # Если директории нет, создаем её
+            os.makedirs(BACKUP_DIR)
 
-        # Получаем список файлов в директории
         backup_files = [
             f for f in os.listdir(BACKUP_DIR) 
             if os.path.isfile(os.path.join(BACKUP_DIR, f))

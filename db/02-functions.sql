@@ -235,12 +235,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION delete_product(p_id INT)
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE delete_product(p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
     DELETE FROM Product WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 CREATE OR REPLACE PROCEDURE add_product(
     p_name VARCHAR(255),
@@ -275,12 +276,29 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE PROCEDURE insert_product(
+    p_name VARCHAR(255),
+    p_description TEXT,
+    p_price DECIMAL(10, 2),
+    p_quantity INT,
+    p_category_id INT,
+    p_image BYTEA
+) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    var_category_id INT;
+BEGIN
+    INSERT INTO Product (name, description, price, quantity, category_id, image)
+    VALUES (p_name, p_description, p_price, p_quantity, p_category_id, p_image);
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION create_order_from_cart(p_customer_id INT)
 RETURNS VOID AS $$
 DECLARE
     var_order_id INT;
 BEGIN
-    -- Проверяем, что для всех товаров в корзине достаточно количества на складе
     IF EXISTS (
         SELECT 1
         FROM Cart c
@@ -290,12 +308,10 @@ BEGIN
         RAISE EXCEPTION 'Not enough stock for one or more products';
     END IF;
 
-    -- Создаем новый заказ для пользователя
     INSERT INTO "Order" (customer_id, order_date, status_id)
-    VALUES (p_customer_id, CURRENT_TIMESTAMP, 1) -- Статус заказа по умолчанию (например, "Ожидание")
+    VALUES (p_customer_id, CURRENT_TIMESTAMP, 1) 
     RETURNING id INTO var_order_id;
 
-    -- Переносим товары из корзины в Order_Product
     INSERT INTO Order_Product (order_id, product_id, product_price, quantity)
     SELECT 
         var_order_id, 
@@ -309,13 +325,11 @@ BEGIN
     WHERE 
         c.customer_id = p_customer_id;
 
-    -- Уменьшаем количество товаров в таблице Product
     UPDATE Product
     SET quantity = Product.quantity - c.quantity
     FROM Cart c
     WHERE Product.id = c.product_id AND c.customer_id = p_customer_id;
 
-    -- Удаляем товары из корзины
     DELETE FROM Cart
     WHERE Cart.customer_id = p_customer_id;
 END;
@@ -338,7 +352,6 @@ CREATE OR REPLACE FUNCTION delete_or_update_cart_product(
     p_product_id INT
 ) RETURNS VOID AS $$
 BEGIN
-    -- Если количество товара равно 1, удаляем запись из корзины
     IF EXISTS (
         SELECT 1
         FROM Cart
@@ -350,7 +363,6 @@ BEGIN
         WHERE customer_id = p_customer_id
           AND product_id = p_product_id;
     ELSE
-        -- Иначе уменьшаем количество товара на 1
         UPDATE Cart
         SET quantity = quantity - 1
         WHERE customer_id = p_customer_id
@@ -400,7 +412,7 @@ RETURNS TABLE (
 BEGIN
     RETURN QUERY
     SELECT
-        s.id,  -- Алиас для таблицы
+        s.id,
         s.nickname,
         s.hashed_password
     FROM Seller s
@@ -426,3 +438,81 @@ BEGIN
     VALUES (p_customer_id, p_product_id, p_quantity);
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION get_cart_item_by_product(p_customer_id INT, p_product_id INT)
+RETURNS TABLE (
+    id INTEGER,
+    customer_id INTEGER,
+    product_id INTEGER,
+    quantity INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        c.id as id,
+        c.customer_id as customer_id,
+        c.product_id as product_id,
+        c.quantity as quantity
+    FROM Cart c
+    WHERE c.customer_id = p_customer_id AND c.product_id = p_product_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION add_default_address()
+RETURNS TRIGGER AS $$
+DECLARE
+    new_address_id INT;
+BEGIN
+    INSERT INTO Customers_Addresses (city, street, house, building, entrance, apartment, floor)
+    VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+    RETURNING id INTO new_address_id;
+
+    NEW.customer_address_id := new_address_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_add_default_address
+BEFORE INSERT ON Customer
+FOR EACH ROW
+EXECUTE FUNCTION add_default_address();
+
+CREATE OR REPLACE FUNCTION update_or_insert_cart()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Cart
+    SET quantity = quantity + NEW.quantity
+    WHERE customer_id = NEW.customer_id AND product_id = NEW.product_id;
+
+    IF FOUND THEN
+        RETURN NULL;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_or_insert_cart
+BEFORE INSERT ON Cart
+FOR EACH ROW
+EXECUTE FUNCTION update_or_insert_cart();
+
+CREATE OR REPLACE FUNCTION delete_product_dependencies()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM Order_Product
+    WHERE product_id = OLD.id;
+
+    DELETE FROM Cart
+    WHERE product_id = OLD.id;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_delete_product_dependencies
+BEFORE DELETE ON Product
+FOR EACH ROW
+EXECUTE FUNCTION delete_product_dependencies();
+

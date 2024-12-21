@@ -9,7 +9,6 @@ import Home from "./components/Home";
 import { getNavigateMenu } from "./components/Navigator";
 import ProductList from "./components/ProductList";
 import Profile from "./components/Profile";
-import Test from "./components/Test";
 import Product from "./components/Product";
 import SellerLogin from "./components/Login/SellerLogin";
 import NewProduct from "./components/NewProduct";
@@ -21,9 +20,6 @@ const App = () => {
             {getNavigateMenu()}
             <div className="main-content">
                 <Routes>
-                    {/* TEST!!!! */}
-                    <Route path="/test" element={<Test />} />
-                    {/* TEST END!!!! */}
                     <Route path="/" element={<Home />} />
                     <Route path="/backups" element={<Backup />} />
                     <Route path="/products" element={<ProductList />} />

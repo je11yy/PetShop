@@ -32,9 +32,6 @@ export const getNavigateMenu = () => {
 
     return (
         <nav className="app-nav">
-            <Link to="/test" className="nav-link">
-                TEST
-            </Link>
             <Link to="/" className="nav-link">
                 <FaHome /> Home
             </Link>

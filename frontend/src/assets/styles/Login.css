@@ -1,4 +1,3 @@
-/* Общий контейнер */
 .login-container {
     display: flex;
     justify-content: center;
@@ -7,7 +6,6 @@
     font-family: "Arial", sans-serif;
 }
 
-/* Карточка логина */
 .login-card {
     background: white;
     padding: 2rem;
@@ -26,20 +24,17 @@
     text-align: center;
 }
 
-/* Заголовок */
 .login-title {
     font-size: 1.8rem;
     color: #333;
     margin-bottom: 1rem;
 }
 
-/* Форма */
 .login-form {
     display: flex;
     flex-direction: column;
 }
 
-/* Поля ввода */
 .form-group {
     margin-bottom: 1rem;
     text-align: left;
@@ -61,19 +56,17 @@
 }
 
 .form-group input:focus {
-    border-color: #4caf50;
+    border-color: #6e4b3a;
     outline: none;
-    box-shadow: 0 0 4px rgba(37, 252, 102, 0.3);
+    box-shadow: 0 0 4px rgba(50, 34, 29, 0.3);
 }
 
-/* Ошибки */
 .error-message {
     color: #e74c3c;
     font-size: 0.9rem;
     margin-bottom: 1rem;
 }
 
-/* Кнопка */
 .login-button {
     background: #6e4b3a;
     color: white;
