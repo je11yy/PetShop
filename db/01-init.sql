@@ -41,17 +41,10 @@ CREATE TABLE Seller (
     hashed_password TEXT
 );
 
-CREATE TABLE Status (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    description TEXT
-);
-
 CREATE TABLE "Order" (
     id SERIAL PRIMARY KEY,
     customer_id INT REFERENCES Customer(id),
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status_id INT REFERENCES Status(id)
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Order_Product (

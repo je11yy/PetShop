@@ -308,8 +308,8 @@ BEGIN
         RAISE EXCEPTION 'Not enough stock for one or more products';
     END IF;
 
-    INSERT INTO "Order" (customer_id, order_date, status_id)
-    VALUES (p_customer_id, CURRENT_TIMESTAMP, 1) 
+    INSERT INTO "Order" (customer_id, order_date)
+    VALUES (p_customer_id, CURRENT_TIMESTAMP) 
     RETURNING id INTO var_order_id;
 
     INSERT INTO Order_Product (order_id, product_id, product_price, quantity)
